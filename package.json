@@ -1,0 +1,22 @@
+{
+  "name": "capstone_available_calendar",
+  "version": "0.0.1",
+  "description": "Capstone part back-end ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Seg-mentation-Fault/Capstone_available_calendar.git"
+  },
+  "author": "Segmentation Fault",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Seg-mentation-Fault/Capstone_available_calendar/issues"
+  },
+  "homepage": "https://github.com/Seg-mentation-Fault/Capstone_available_calendar#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
