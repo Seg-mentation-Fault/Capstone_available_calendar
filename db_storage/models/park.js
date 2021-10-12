@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 
-const mapUser = (sequelize) => {
-  class User extends Model {}
+const mapPark = (sequelize) => {
+  class Park extends Model {}
 
-  User.init(
+  Park.init(
     {
       // Model attributes are defined here
       id: {
@@ -12,7 +12,7 @@ const mapUser = (sequelize) => {
         autoIncrement: true,
         unique: true,
       },
-      firstName: {
+      name: {
         type: DataTypes.STRING(128),
         notEmpty: true,
         allowNull: false,
@@ -20,33 +20,21 @@ const mapUser = (sequelize) => {
           isAlphanumeric: false,
         },
       },
-      lastName: {
-        type: DataTypes.STRING(128),
-        notEmpty: true,
+      capacity: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          isAlphanumeric: false,
-        },
-      },
-      email: {
-        type: DataTypes.STRING(128),
-        allowNull: false,
-        unique: true,
-        validate: {
-          isEmail: true,
-        },
       },
     },
     {
       // Other model options go here
       sequelize, // We need to pass the connection instance
-      modelName: 'User', // We need to choose the model name
+      modelName: 'Park', // We need to choose the model name
     }
   );
   (async () => {
-    await User.sync();
+    await Park.sync();
   })();
-  return User;
+  return Park;
 };
 
-module.exports = mapUser;
+module.exports = mapPark;

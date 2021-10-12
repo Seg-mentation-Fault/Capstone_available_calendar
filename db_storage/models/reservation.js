@@ -2,6 +2,7 @@ const { DataTypes, Model } = require('sequelize');
 const randomstring = require('randomstring');
 
 const User = require('./user');
+const Park = require('./park');
 
 const mapReservation = (sequelize) => {
   class Reservation extends Model {}
@@ -11,8 +12,10 @@ const mapReservation = (sequelize) => {
       // Model attributes are defined here
       date: {
         type: DataTypes.DATEONLY,
-        isDate: true,
         allowNull: false,
+        validate: {
+          issDate: true,
+        },
       },
       numOfGuests: {
         type: DataTypes.INTEGER,
@@ -39,11 +42,18 @@ const mapReservation = (sequelize) => {
   );
   (async () => {
     Reservation.removeAttribute('id');
-    // Reservation.belongsTo(Park);
+
+    // Forein key for parkId
+    const park = Park(sequelize);
+    Reservation.belongsTo(park);
+    park.hasMany(Reservation);
+
+    // Forein key for userId
     const user = User(sequelize);
     Reservation.belongsTo(user);
     user.hasMany(Reservation);
-    await Reservation.sync({ force: true });
+
+    await Reservation.sync();
   })();
   return Reservation;
 };
