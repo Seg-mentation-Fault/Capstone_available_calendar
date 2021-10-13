@@ -1,3 +1,5 @@
+const randomstring = require('randomstring');
+
 const User = require('../models/user');
 const Park = require('../models/park');
 const Reservation = require('../models/reservation');
@@ -45,7 +47,7 @@ class DBstorage {
         reservationAttr.numOfGuests >
         capacityDay.dayCapacity - capacityConfirm
       ) {
-        return { error: true };
+        throw new Error('No Capacity');
       }
       let user = await this.user.findOne({ where: { email: userAttr.email } });
       if (user === null) {
@@ -62,6 +64,10 @@ class DBstorage {
       const reservation = await this.createRecord(
         'Reservation',
         {
+          confirmCode: randomstring.generate({
+            length: 6,
+            charset: 'alphanumeric',
+          }),
           date: reservationAttr.date,
           numOfGuests: reservationAttr.numOfGuests,
           ParkId: reservationAttr.ParkId,
@@ -70,10 +76,10 @@ class DBstorage {
         t
       );
       await t.commit();
-      return { user, reservation, error: false };
+      return { reservation };
     } catch (error) {
       await t.rollback();
-      return { error: true };
+      throw error;
     }
   }
 
