@@ -14,7 +14,7 @@ const mapReservation = (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
         validate: {
-          issDate: true,
+          isDate: true,
         },
       },
       numOfGuests: {
