@@ -1,6 +1,8 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 
+const { newUserReservation } = require('../service/userReservation');
+
 const router = express.Router();
 
 const validation = [
@@ -47,8 +49,8 @@ module.exports = (storage) => {
 
       const { firstName, lastName, email, numOfGuests, date, ParkId } =
         req.body;
-      console.log(email);
-      const newReservation = await storage.newUserReservation(
+      const newReservation = await newUserReservation(
+        storage,
         { firstName, lastName, email },
         { numOfGuests, date, ParkId }
       );

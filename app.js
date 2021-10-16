@@ -1,7 +1,7 @@
 const express = require('express');
 
-const storage = require('./db_storage/connection');
-const routes = require('./routes');
+const storage = require('./src/connection');
+const routes = require('./src/routes');
 
 const app = express();
 const port = 3000;

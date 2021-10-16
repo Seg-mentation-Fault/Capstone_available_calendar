@@ -1,5 +1,4 @@
-const randomstring = require('randomstring');
-
+//  models for database
 const User = require('../models/user');
 const Park = require('../models/park');
 const Reservation = require('../models/reservation');
@@ -22,65 +21,6 @@ class DBstorage {
       transaction: t,
     });
     return newRecord;
-  }
-
-  /*  create a new and resevation at the same time
-   *  recives two objects, each one is for the createion of its model
-   */
-  async newUserReservation(userAttr, reservationAttr) {
-    const t = await this.client.transaction();
-
-    try {
-      let capacityConfirm = await this.reservation.sum('numOfGuests', {
-        where: { date: reservationAttr.date, ParkId: reservationAttr.ParkId },
-      });
-      if (Object.is(capacityConfirm, NaN) === true) {
-        capacityConfirm = 0;
-      }
-      const capacityDay = await this.parkCapacity.findOne({
-        where: {
-          date: reservationAttr.date,
-          ParkId: reservationAttr.ParkId,
-        },
-      });
-      if (
-        reservationAttr.numOfGuests >
-        capacityDay.dayCapacity - capacityConfirm
-      ) {
-        throw new Error('No Capacity');
-      }
-      let user = await this.user.findOne({ where: { email: userAttr.email } });
-      if (user === null) {
-        user = await this.createRecord(
-          'User',
-          {
-            firstName: userAttr.firstName,
-            lastName: userAttr.lastName,
-            email: userAttr.email,
-          },
-          t
-        );
-      }
-      const reservation = await this.createRecord(
-        'Reservation',
-        {
-          confirmCode: randomstring.generate({
-            length: 6,
-            charset: 'alphanumeric',
-          }),
-          date: reservationAttr.date,
-          numOfGuests: reservationAttr.numOfGuests,
-          ParkId: reservationAttr.ParkId,
-          UserId: user.id,
-        },
-        t
-      );
-      await t.commit();
-      return { reservation };
-    } catch (error) {
-      await t.rollback();
-      throw error;
-    }
   }
 
   /* return a list of objects with each park for a given date
