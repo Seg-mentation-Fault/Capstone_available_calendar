@@ -22,49 +22,6 @@ class DBstorage {
     });
     return newRecord;
   }
-
-  /* return a list of objects with each park for a given date
-   * each object contain:
-   *   id: for given park date
-   *   name: for given park date
-   *   aviability: true if there is space, or false if there is not space
-   */
-  async parkByDay(data) {
-    const parksDays = await this.parkCapacity.findAll({
-      where: { date: data.date },
-      include: {
-        model: this.park,
-      },
-    });
-
-    const result = [];
-    parksDays.forEach((element) => {
-      const parkInfo = {
-        id: element.Park.id,
-        name: element.Park.name,
-        aviability: element.dayCapacity,
-      };
-      result.push(parkInfo);
-    });
-    return Promise.all(
-      result.map(async (obj) => {
-        const obj2 = obj;
-        let capacityConfirm = await this.reservation.sum('numOfGuests', {
-          where: { date: data.date, ParkId: obj.id },
-        });
-
-        if (Object.is(capacityConfirm, NaN) === true) {
-          capacityConfirm = 0;
-        }
-        if (data.numOfGuests > obj.aviability - capacityConfirm) {
-          obj2.aviability = false;
-        } else {
-          obj2.aviability = true;
-        }
-        return obj2;
-      })
-    );
-  }
 }
 
 module.exports = DBstorage;

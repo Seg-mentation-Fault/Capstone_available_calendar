@@ -12,4 +12,19 @@ const getParkCapacityDay = async (storage, attributes) => {
   }
 };
 
+const getAllParksDay = async (storage, data) => {
+  try {
+    const parksDays = await storage.parkCapacity.findAll({
+      where: { date: data.date },
+      include: {
+        model: storage.park,
+      },
+    });
+    return parksDays;
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.getParkCapacityDay = getParkCapacityDay;
+exports.getAllParksDay = getAllParksDay;
