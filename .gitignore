@@ -104,4 +104,4 @@ dist
 .tern-port
 
 #credentials
-db_storage/credentials.js
+src/credentials.js
