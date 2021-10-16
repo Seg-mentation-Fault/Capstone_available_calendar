@@ -1,5 +1,16 @@
 const randomstring = require('randomstring');
 
+/**
+ * createReservation - Post a new reservation record.
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to create the new reservation
+ * @param {string} attributes.date - String with the date farmat "yyyy-mm-dd"
+ * @param {Number} attributes.numOfGuests - Number of guests
+ * @param {Number} attributes.ParkId - Id number of a park
+ * @param {Number} userId - Id number for a specific user
+ * @return {Object} reservation - record of the new reservation
+ */
 const createReservation = async (storage, attributes, userId, t) => {
   try {
     const reservation = await storage.createRecord(
@@ -22,6 +33,15 @@ const createReservation = async (storage, attributes, userId, t) => {
   }
 };
 
+/**
+ * capacityConfirm - Get the sum of all guests confirmations for a given park an day
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to create the new reservation
+ * @param {string} attributes.date - String with the date farmat "yyyy-mm-dd"
+ * @param {Number} attributes.ParkId - Id number of a park
+ * @return {Object} reservation - record of the new reservation
+ */
 const capacityConfirm = async (storage, attributes) => {
   try {
     //  returns the numbers of guests confirms
