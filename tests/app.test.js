@@ -51,10 +51,9 @@ describe('POST /retrive-parks-date ', () => {
 
   it('Respond with a empty list, date with no parks asigned', (done) => {
     try {
-      // porque no funviona con '2021-10-5'
       request('http://localhost:3000/api/v1/')
         .post('/retrive-parks-date')
-        .send({ numOfGuests: 400, date: '2021-10-15' })
+        .send({ numOfGuests: 400, date: '2021-10-05' })
         .expect(200)
         .then((response) => {
           expect(response.body).toStrictEqual([]);
@@ -101,14 +100,14 @@ describe('POST /retrive-parks-date ', () => {
     }
   });
 
-  it.skip('Respond with a ERROR, numOfGuests should be a number', (done) => {
+  it('Respond with a ERROR, numOfGuests should be a number', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
         .post('/retrive-parks-date')
         .send({ numOfGuests: 'any8000', date: '2021-10-13' })
         .expect(400)
         .then((response) => {
-          expect(response.body).toContain({
+          expect(response.body).toEqual({
             errors: [
               {
                 value: 'any8000',
@@ -125,7 +124,7 @@ describe('POST /retrive-parks-date ', () => {
     }
   });
 
-  it.skip('Respond with a ERROR, date should be a valid date', (done) => {
+  it('Respond with a ERROR, date should be a valid date', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
         .post('/retrive-parks-date')
@@ -135,7 +134,7 @@ describe('POST /retrive-parks-date ', () => {
           if (err) {
             return done(err);
           }
-          expect(res.body).toContain({
+          expect(res.body).toEqual({
             errors: [
               {
                 value: '2021-13-13',
@@ -171,7 +170,7 @@ describe.skip('POST /reservation', () => {
   // });
   it('Respond with an object, with done status and code confirmation', async () => {
     const body = {
-      firstName: 'tatname',
+      firstName: 'testname',
       lastName: 'testlast',
       email: 'test1@gmail.com',
       numOfGuests: 10,
