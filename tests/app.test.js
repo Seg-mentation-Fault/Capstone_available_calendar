@@ -1,6 +1,6 @@
 const request = require('supertest');
-// const storage = require('../src/connection');
-// jest.setTimeout(20000);
+const storage = require('../src/connection');
+
 describe('GET / ', () => {
   it('Respond with Ok status code 200', (done) => {
     try {
@@ -12,6 +12,25 @@ describe('GET / ', () => {
 });
 
 describe('POST /retrive-parks-date ', () => {
+  beforeAll(async () => {
+    await storage.parkCapacity.bulkCreate([
+      { date: '2021-10-13', ParkId: 1, dayCapacity: 1000 },
+      { date: '2021-10-14', ParkId: 1, dayCapacity: 4000 },
+      { date: '2021-10-13', ParkId: 2, dayCapacity: 6000 },
+      { date: '2021-10-14', ParkId: 2, dayCapacity: 1000 },
+      { date: '2021-10-13', ParkId: 3, dayCapacity: 1000 },
+      { date: '2021-10-14', ParkId: 3, dayCapacity: 5000 },
+      { date: '2021-10-13', ParkId: 4, dayCapacity: 2000 },
+      { date: '2021-10-14', ParkId: 4, dayCapacity: 500 },
+    ]);
+    // done();
+  });
+
+  afterAll((done) => {
+    storage.parkCapacity.destroy({ truncate: true });
+    done();
+  });
+
   it('Respond list of objects with parks information, valid guest and date', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
@@ -19,7 +38,7 @@ describe('POST /retrive-parks-date ', () => {
         .send({ numOfGuests: 400, date: '2021-10-13' })
         .expect(200)
         .then((response) => {
-          expect(response.body).toStrictEqual([
+          expect(response.body).toEqual([
             {
               id: 1,
               name: 'Mundo Aventura',
@@ -44,7 +63,6 @@ describe('POST /retrive-parks-date ', () => {
           done();
         });
     } catch (error) {
-      // throw error;
       done(error);
     }
   });
@@ -71,7 +89,7 @@ describe('POST /retrive-parks-date ', () => {
         .send({ numOfGuests: 8000, date: '2021-10-13' })
         .expect(200)
         .then((response) => {
-          expect(response.body).toStrictEqual([
+          expect(response.body).toEqual([
             {
               id: 1,
               name: 'Mundo Aventura',
@@ -168,7 +186,7 @@ describe.skip('POST /reservation', () => {
   //   storage.client.dropTable('Users');
   //   done();
   // });
-  it('Respond with an object, with done status and code confirmation', async () => {
+  it.skip('Respond with an object, with done status and code confirmation', async () => {
     const body = {
       firstName: 'testname',
       lastName: 'testlast',
