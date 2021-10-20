@@ -37,7 +37,6 @@ const getAllParksDay = async (storage, data) => {
         model: storage.park,
       },
     });
-    console.log(parksDays);
     return parksDays;
   } catch (err) {
     throw err;
