@@ -104,4 +104,4 @@ dist
 .tern-port
 
 #credentials
-src/credentials.js
+# src/credentials.js

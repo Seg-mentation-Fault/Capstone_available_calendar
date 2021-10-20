@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
-const DBstorage = require('./engine/db_storage');
 
+const DBstorage = require('./engine/db_storage');
 const { db } = require('./credentials');
 
 const connectMysql = () => {

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Seg-mentation-Fault/Capstone_available_calendar#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
     "mysql2": "^2.3.0",
