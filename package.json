@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "jest"
+    "build": "node app.js > app.out.log 2> app.err.log < /dev/null &",
+    "test": "jest",
+    "stop": "pkill node"
   },
   "repository": {
     "type": "git",
