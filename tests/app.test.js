@@ -179,34 +179,3 @@ describe('POST /retrive-parks-date ', () => {
     }
   });
 });
-
-describe.skip('POST /reservation', () => {
-  // afterEach((done) => {
-  //   storage.client.dropTable('Reservations');
-  //   storage.client.dropTable('Users');
-  //   done();
-  // });
-  it.skip('Respond with an object, with done status and code confirmation', async () => {
-    const body = {
-      firstName: 'testname',
-      lastName: 'testlast',
-      email: 'test1@gmail.com',
-      numOfGuests: 10,
-      date: '2021-10-13',
-      ParkId: 2,
-    };
-    request(
-      'http://localhost:3000/api/v1/reservation',
-      body,
-      async (req, res) => {
-        const response = JSON.parse(res.body);
-        await expect(response).toBeCalledWith(
-          expect.objectContaining({
-            done: expect.toBe(false),
-            confirmCode: expect.any(String),
-          })
-        );
-      }
-    );
-  });
-});

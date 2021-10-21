@@ -27,6 +27,7 @@ const createReservation = async (storage, attributes, userId, t) => {
       },
       t
     );
+
     return reservation;
   } catch (err) {
     throw err;
@@ -56,5 +57,27 @@ const capacityConfirm = async (storage, attributes) => {
     throw err;
   }
 };
+
+/**
+ * getReservation - Get all reservation filter by given data
+ * @param {*} storage -Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to filter the search
+ * @return {Array} reservations - list with all reservations for a park in a specific date
+ */
+const getAllReservation = async (storage, attributes) => {
+  try {
+    const query = await storage.reservation.findAll({
+      where: attributes,
+    });
+    const reservations = [];
+    query.forEach((element) => {
+      reservations.push(element.dataValues);
+    });
+    return reservations;
+  } catch (err) {
+    throw err;
+  }
+};
 exports.createReservation = createReservation;
 exports.capacityConfirm = capacityConfirm;
+exports.getAllReservation = getAllReservation;
