@@ -3,6 +3,7 @@ const storage = require('../../src/connection');
 const {
   getParkCapacityDay,
   newParkCapacity,
+  deleteParkCapacity,
 } = require('../../src/controllers/parkCapacityController');
 
 describe('Park capacity model', () => {
@@ -11,47 +12,18 @@ describe('Park capacity model', () => {
       { date: '2021-11-01', ParkId: 2, dayCapacity: 2000 },
       { date: '2021-11-02', ParkId: 2, dayCapacity: 3000 },
     ]);
-    // done();
   });
 
   afterAll(async () => {
     await storage.parkCapacity.destroy({
-      where: {
-        date: '2021-11-01',
-        ParkId: 2,
-      },
+      where: { date: '2021-11-01', ParkId: 2 },
     });
     await storage.parkCapacity.destroy({
-      where: {
-        date: '2021-11-02',
-        ParkId: 2,
-      },
+      where: { date: '2021-11-02', ParkId: 2 },
     });
     await storage.parkCapacity.destroy({
-      where: {
-        date: '2021-11-01',
-        ParkId: 4,
-      },
+      where: { date: '2021-11-01', ParkId: 4 },
     });
-    // done();
-  });
-
-  it('return the number of capacity that was set for a specifiic day', async () => {
-    const valid = {
-      date: '2021-11-01',
-      ParkId: 2,
-    };
-    const actual = await getParkCapacityDay(storage, valid);
-    expect(actual).toEqual(2000);
-  });
-
-  it('return the nuber of capacity that was set for a specifiic day', async () => {
-    const valid = {
-      date: '2021-11-02',
-      ParkId: 2,
-    };
-    const actual = await getParkCapacityDay(storage, valid);
-    expect(actual).toEqual(3000);
   });
 
   it('create a parckCapacityRecord with valid fields', async () => {
@@ -68,5 +40,48 @@ describe('Park capacity model', () => {
     } catch (error) {
       throw error;
     }
+  });
+
+  it('return park`s capacity number for a given day', async () => {
+    const valid = { date: '2021-11-01', ParkId: 2 };
+    const valid2 = { date: '2021-11-02', ParkId: 2 };
+
+    const actual = await getParkCapacityDay(storage, valid);
+    const actual2 = await getParkCapacityDay(storage, valid2);
+
+    expect(actual).toEqual(2000);
+    expect(actual2).toEqual(3000);
+  });
+
+  it.skip('Throw an error passing a date without assigned parks', async () => {
+    const invalid = { date: '2021-01-01', ParkId: 2 };
+
+    expect(async () => {
+      await getParkCapacityDay(storage, invalid);
+    }).toThrowError('There is no park assigned for this day');
+  });
+
+  it('Delete a record of park capacity with valid fields', async () => {
+    await storage.parkCapacity.create({
+      date: '2021-11-03',
+      ParkId: 3,
+      dayCapacity: 1000,
+    });
+
+    const valid = { date: '2021-11-03', ParkId: 3 };
+    const actual = await deleteParkCapacity(storage, valid);
+    expect(actual).toEqual(1);
+  });
+
+  it('Return 0 when date don`t has assigned parks capacitys', async () => {
+    const invalid = { date: '2021-11-04', ParkId: 3 };
+    const actual = await deleteParkCapacity(storage, invalid);
+    expect(actual).toEqual(0);
+  });
+
+  it('Return 0 when Id park dosnot exist', async () => {
+    const invalid = { date: '2021-11-01', ParkId: 7 };
+    const actual = await deleteParkCapacity(storage, invalid);
+    expect(actual).toEqual(0);
   });
 });
