@@ -29,7 +29,7 @@ const newUserReservation = async (storage, userAttr, reservationAttr) => {
     if (reservationAttr.numOfGuests > capacityDay - ConfirmGuest) {
       throw new Error('No Capacity');
     }
-    const user = createUser(storage, userAttr, t);
+    const user = await createUser(storage, userAttr, t);
     const reservation = await createReservation(
       storage,
       reservationAttr,
