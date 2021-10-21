@@ -60,24 +60,62 @@ const capacityConfirm = async (storage, attributes) => {
 
 /**
  * getReservation - Get all reservation filter by given data
- * @param {*} storage -Constructor of the data base strorage.
+ * @param {*} storage - Constructor of the data base strorage.
  * @param {Object} attributes - Object with data to filter the search
  * @return {Array} reservations - list with all reservations for a park in a specific date
  */
 const getAllReservation = async (storage, attributes) => {
   try {
-    const query = await storage.reservation.findAll({
+    const reservations = await storage.reservation.findAll({
       where: attributes,
-    });
-    const reservations = [];
-    query.forEach((element) => {
-      reservations.push(element.dataValues);
+      raw: true,
     });
     return reservations;
   } catch (err) {
     throw err;
   }
 };
+
+/**
+ * getReservation - Get a reservation filter by confirm code
+ * @param {*} storage - Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to filter the search
+ * @param {Object} attributes.confirmCode - Object with data to filter the search
+ * @return {Array} reservation - object with a specific reservation
+ */
+const getReservation = async (storage, attributes) => {
+  try {
+    const reservation = await storage.reservation.findOne({
+      where: { confirmCode: attributes.confirmCode },
+    });
+    return reservation;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * deleteReservation - delete one reservation by a given confirm code
+ * @param {*} storage - Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to delete a reservation
+ * @param {String} attributes.confirmCode - String
+ * @param {*} t
+ */
+const deleteReservation = async (storage, attributes, t) => {
+  try {
+    const deleted = await storage.deleteRecord(
+      'Reservation',
+      { confirmCode: attributes.confirmCode },
+      t
+    );
+    return deleted;
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.createReservation = createReservation;
 exports.capacityConfirm = capacityConfirm;
 exports.getAllReservation = getAllReservation;
+exports.getReservation = getReservation;
+exports.deleteReservation = deleteReservation;
