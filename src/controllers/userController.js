@@ -31,9 +31,19 @@ const createUser = async (storage, attributes, t) => {
   }
 };
 
+/**
+ * getUser - verify if a user exits or does not exits
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to get a user
+ * @param {String} attributes.email - String with a valid email
+ * @return {Object} user - record of user to find or not if does not exits
+ */
 const getUser = async (storage, attributes) => {
   try {
-    const user = await storage.user.findOne({ where: { email: attributes.email } });
+    const user = await storage.user.findOne({
+      where: { email: attributes.email },
+    });
     if (user) {
       return user;
     }
