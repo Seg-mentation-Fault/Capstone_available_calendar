@@ -39,13 +39,14 @@ class DBstorage {
    * @param {String} model - The of the model delete a record
    * @param {Object} attributes - Object with data to delete the instance.
    * @param {*} t - transaction of the ORM
-   * @returns deleted row
+   * @returns number of rows deleted
    */
   async deleteRecord(model, attributes, t) {
-    return this.models[model].destroy(
+    const deleted = this.models[model].destroy(
       { where: attributes },
       { transaction: t }
     );
+    return deleted;
   }
 }
 
