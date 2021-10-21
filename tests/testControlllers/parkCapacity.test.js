@@ -42,6 +42,21 @@ describe('Park capacity model', () => {
     }
   });
 
+  it.skip('Throw an error passing a fake Park ID to new park capacity', async () => {
+    try {
+      const invalid = {
+        date: '2021-11-01',
+        dayCapacity: 1500,
+        ParkId: 7,
+      };
+      expect(async () => {
+        await newParkCapacity(storage, invalid);
+      }).toThrowError('Park ID does not exist');
+    } catch (error) {
+      throw error;
+    }
+  });
+
   it('return park`s capacity number for a given day', async () => {
     const valid = { date: '2021-11-01', ParkId: 2 };
     const valid2 = { date: '2021-11-02', ParkId: 2 };

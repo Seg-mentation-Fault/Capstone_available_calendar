@@ -18,6 +18,7 @@ const getParkCapacityDay = async (storage, attributes) => {
     if (capacityDay === null) {
       throw new Error('There is no park assigned for this day');
     } else {
+      console.log('-----inside else---------');
       return capacityDay.dayCapacity;
     }
   } catch (err) {
@@ -59,13 +60,19 @@ const getAllParksDay = async (storage, data) => {
  */
 const newParkCapacity = async (storage, attributes, t) => {
   try {
+    // search if parck capacity for a given date alrready exists
     let parkCapacity = await storage.parkCapacity.findOne({
       where: { date: attributes.date, ParkId: attributes.ParkId },
     });
+    // get the full capacity of a park
     const fullCapacity = await storage.park.findOne({
       attributes: ['capacity'],
       where: { id: attributes.ParkId },
     });
+    if (fullCapacity === null) {
+      throw new Error('Park ID does not exist');
+    }
+    // create the new record if the given capacity is less than full capacity
     if (
       parkCapacity === null &&
       attributes.dayCapacity <= fullCapacity.dataValues.capacity
