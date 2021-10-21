@@ -31,4 +31,17 @@ const createUser = async (storage, attributes, t) => {
   }
 };
 
+const getUser = async (storage, attributes) => {
+  try {
+    const user = await storage.user.findOne({ where: { email: attributes.email } });
+    if (user) {
+      return user;
+    }
+    throw new Error('there is no such user');
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.createUser = createUser;
+exports.getUser = getUser;
