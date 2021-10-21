@@ -53,5 +53,40 @@ const getUser = async (storage, attributes) => {
   }
 };
 
+/**
+ * getAllUser - gives all the users for all reservations
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @return {Object} user - record of user to find or not if does not exits
+ */
+const getAllUser = async (storage, attributes = null) => {
+  try {
+    if (attributes === null) {
+      const users = await storage.user.findAll({ raw: true });
+      return users;
+    }
+    const reservationDate = await storage.reservation.findAll({
+      where: { date: attributes.date, ParkId: attributes.ParkId },
+      include: {
+        model: storage.user,
+      },
+    });
+    // console.log(reservationDate);
+    const users = [];
+    const ids = [];
+    reservationDate.forEach((element) => {
+      if (!ids.includes(element.dataValues.User.dataValues.id)) {
+        users.push(element.dataValues.User.dataValues);
+      }
+      ids.push(element.dataValues.User.dataValues.id);
+    });
+    return users;
+    // throw new Error('there is not users');
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.createUser = createUser;
 exports.getUser = getUser;
+exports.getAllUser = getAllUser;
