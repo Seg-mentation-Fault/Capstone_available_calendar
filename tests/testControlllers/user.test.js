@@ -3,6 +3,8 @@ const {
   createUser,
   getUser,
   getAllUser,
+  deleteUser,
+  updateUser,
 } = require('../../src/controllers/userController');
 const { newUserReservation } = require('../../src/service/userReservation');
 
@@ -99,12 +101,56 @@ describe('getAllUSer', () => {
     });
     expect(users.length).toEqual(1);
     expect(users[0].email).toEqual('userTU1@gmail.com');
-    await storage.parkCapacity.destroy({ where: { ParkId: capacityDay1.ParkId } });
-    await storage.parkCapacity.destroy({ where: { ParkId: capacityDay2.ParkId } });
+    await storage.parkCapacity.destroy({
+      where: { ParkId: capacityDay1.ParkId },
+    });
+    await storage.parkCapacity.destroy({
+      where: { ParkId: capacityDay2.ParkId },
+    });
     await storage.user.destroy({ where: { email: 'userTU1@gmail.com' } });
     await storage.user.destroy({ where: { email: 'userTU2@gmail.com' } });
-    console.log(reservation1.reservation.dataValues)
-    await storage.reservation.destroy({ where: { confirmCode: reservation1.reservation.dataValues.confirmCode } });
-    await storage.reservation.destroy({ where: { confirmCode: reservation2.reservation.dataValues.confirmCode } });
+    await storage.reservation.destroy({
+      where: { confirmCode: reservation1.reservation.dataValues.confirmCode },
+    });
+    await storage.reservation.destroy({
+      where: { confirmCode: reservation2.reservation.dataValues.confirmCode },
+    });
+  });
+});
+
+describe('delete user', () => {
+  it.skip('Should delete a given user by email', async () => {
+    await createUser(storage, {
+      firstName: 'user1',
+      lastName: 'user1',
+      email: 'username12@example.com',
+    });
+    const deleted = await deleteUser(storage, {
+      email: 'username12@example.com',
+    });
+    expect(deleted).toEqual({ done: true });
+  });
+});
+
+describe('Update User', () => {
+  it('should updated the user', async () => {
+    await createUser(storage, {
+      firstName: 'usertest',
+      lastName: 'usertest',
+      email: 'username20@example.com',
+    });
+    const updated = await updateUser(
+      storage,
+      {
+        email: 'username20@example.com',
+      },
+      { firstName: 'NUevo' }
+    );
+    expect(updated[0]).toBeGreaterThanOrEqual(1);
+    const userUpdated = await getUser(storage, {
+      email: 'username20@example.com',
+    });
+    expect(userUpdated.firstName).toEqual('NUevo');
+    await storage.user.destroy({ where: { email: 'username20@example.com' } });
   });
 });

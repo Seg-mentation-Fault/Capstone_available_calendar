@@ -43,6 +43,7 @@ const getUser = async (storage, attributes) => {
   try {
     const user = await storage.user.findOne({
       where: { email: attributes.email },
+      raw: true,
     });
     if (user) {
       return user;
@@ -57,6 +58,9 @@ const getUser = async (storage, attributes) => {
  * getAllUser - gives all the users for all reservations
  * @async
  * @param {} storage - Constructor of the data base strorage.
+ * @param {object} attributes - object with the data neded, not neccessary
+ * @param {date} attributes.date - the day when the user create the reseravation
+ * @param {integer} attributes.ParkId - the Id number of the Park
  * @return {Object} user - record of user to find or not if does not exits
  */
 const getAllUser = async (storage, attributes = null) => {
@@ -87,6 +91,51 @@ const getAllUser = async (storage, attributes = null) => {
   }
 };
 
+/**
+ * deleteUser - delete an user by email
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @param {object} attributes - object with the data neded
+ * @param {string} attributes.email - the email of the user to be deleted
+ * @param {} t - the key for the transactions
+ * @return {Object} user - record of user to find or not if does not exits
+ */
+const deleteUser = async (storage, attributes, t) => {
+  try {
+    const deleteattr = { email: attributes.email };
+    const deleted = await storage.deleteRecord('User', deleteattr, t);
+    if (deleted >= 1) {
+      return { done: true };
+    }
+    throw new Error('nothig was deleted');
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * updateUser - updates an user by email
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @param {object} Oldattributes - object with the data neded
+ * @param {string} Oldattributes.email - the email of the user to be updated
+ * @param {object} newAttributes - the object with the attributes to be updated
+ * @param {} t - the key for the transaction action
+ * @return {Object} user - record of user to find or not if does not exits
+ */
+const updateUser = async (storage, oldAttributes, newAttributes) => {
+  try {
+    const updated = await storage.user.update(newAttributes, {
+      where: oldAttributes,
+    });
+    return updated;
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.createUser = createUser;
 exports.getUser = getUser;
 exports.getAllUser = getAllUser;
+exports.deleteUser = deleteUser;
+exports.updateUser = updateUser;
