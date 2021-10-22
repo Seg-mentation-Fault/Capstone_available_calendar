@@ -100,6 +100,7 @@ const getReservation = async (storage, attributes) => {
  * @param {Object} attributes - Object with data to delete a reservation
  * @param {String} attributes.confirmCode - String
  * @param {*} t
+ * @returns {object} done:true if deletion was success and error if not
  */
 const deleteReservation = async (storage, attributes, t) => {
   try {
@@ -108,7 +109,36 @@ const deleteReservation = async (storage, attributes, t) => {
       { confirmCode: attributes.confirmCode },
       t
     );
-    return deleted;
+    if (deleted >= 1) {
+      return { done: true };
+    }
+    throw new Error('Nothing was deleted');
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
+ * updateReservation - update a reservation record
+ * @param {*} storage - Constructor of the data base strorage.
+ * @param {Object} oldAttr -attributes to find the record to update
+ * @param {Object} oldAttr.confirmCode -attributes to find the record to update
+ * @param {Object} newAttr - atrributes to update
+ * @param {*} t - transaction of the ORM
+ * @returns {object} done:true if update was success and error if not
+ */
+const updateReservation = async (storage, oldAttr, newAttr, t) => {
+  try {
+    const updated = await storage.updateRecord(
+      'Reservation',
+      { confirmCode: oldAttr.confirmCode },
+      newAttr,
+      t
+    );
+    if (updated[0] >= 1) {
+      return { done: true };
+    }
+    throw new Error('Nothing was updated');
   } catch (err) {
     throw err;
   }
@@ -119,3 +149,4 @@ exports.capacityConfirm = capacityConfirm;
 exports.getAllReservation = getAllReservation;
 exports.getReservation = getReservation;
 exports.deleteReservation = deleteReservation;
+exports.updateReservation = updateReservation;

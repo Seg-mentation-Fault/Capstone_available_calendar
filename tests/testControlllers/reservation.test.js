@@ -3,6 +3,7 @@ const {
   getAllReservation,
   getReservation,
   deleteReservation,
+  updateReservation,
 } = require('../../src/controllers/reservationController');
 
 describe('Reservation model', () => {
@@ -137,14 +138,45 @@ describe('Reservation model', () => {
   });
 
   it('Delete a record of reservation with valid fields', async () => {
-    const valid = { confirmCode: '1d5s9t' };
-    const actual = await deleteReservation(storage, valid);
-    expect(actual).toEqual(1);
+    try {
+      const valid = { confirmCode: '1d5s9t' };
+      const actual = await deleteReservation(storage, valid);
+      expect(actual).toEqual({ done: true });
+    } catch (err) {
+      throw err;
+    }
   });
 
   it('Return 0 when pass invalid field', async () => {
-    const invalid = { confirmCode: '9658oi' };
-    const actual = await deleteReservation(storage, invalid);
-    expect(actual).toEqual(0);
+    try {
+      const invalid = { confirmCode: '96583i' };
+      await expect(deleteReservation(storage, invalid)).rejects.toBeInstanceOf(
+        Error
+      );
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('Return 0 when pass invalid field', async () => {
+    try {
+      const invalid = { date: '2021-10-14' };
+      await expect(deleteReservation(storage, invalid)).rejects.toBeInstanceOf(
+        Error
+      );
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  it('update a record of parck capacity with valid', async () => {
+    try {
+      const oldValid = { confirmCode: 'fd48tr' };
+      const newValid = { numOfGuests: 5 };
+      const actual = await updateReservation(storage, oldValid, newValid);
+      expect(actual).toEqual({ done: true });
+    } catch (err) {
+      throw err;
+    }
   });
 });

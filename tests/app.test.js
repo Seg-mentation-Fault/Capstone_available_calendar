@@ -26,9 +26,10 @@ describe('POST /retrive-parks-date ', () => {
     // done();
   });
 
-  afterAll((done) => {
-    storage.parkCapacity.destroy({ truncate: true });
-    done();
+  afterAll(async () => {
+    await storage.parkCapacity.destroy({
+      where: { date: ['2021-10-13', '2021-10-14'] },
+    });
   });
 
   it('Respond list of objects with parks information, valid guest and date', (done) => {
