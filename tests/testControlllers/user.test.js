@@ -119,7 +119,7 @@ describe('getAllUSer', () => {
 });
 
 describe('delete user', () => {
-  it.skip('Should delete a given user by email', async () => {
+  it('Should delete a given user by email', async () => {
     await createUser(storage, {
       firstName: 'user1',
       lastName: 'user1',
@@ -146,7 +146,7 @@ describe('Update User', () => {
       },
       { firstName: 'NUevo' }
     );
-    expect(updated[0]).toBeGreaterThanOrEqual(1);
+    expect(updated).toBeGreaterThanOrEqual(1);
     const userUpdated = await getUser(storage, {
       email: 'username20@example.com',
     });

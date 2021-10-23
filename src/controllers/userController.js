@@ -98,7 +98,7 @@ const getAllUser = async (storage, attributes = null) => {
  * @param {object} attributes - object with the data neded
  * @param {string} attributes.email - the email of the user to be deleted
  * @param {} t - the key for the transactions
- * @return {Object} user - record of user to find or not if does not exits
+ * @return {integer} user - a number greather than 0 of the deleted records
  */
 const deleteUser = async (storage, attributes, t) => {
   try {
@@ -121,14 +121,17 @@ const deleteUser = async (storage, attributes, t) => {
  * @param {string} Oldattributes.email - the email of the user to be updated
  * @param {object} newAttributes - the object with the attributes to be updated
  * @param {} t - the key for the transaction action
- * @return {Object} user - record of user to find or not if does not exits
+ * @return {integer} user - a number grether tan 0 of the records updates
  */
-const updateUser = async (storage, oldAttributes, newAttributes) => {
+const updateUser = async (storage, oldAttributes, newAttributes, t) => {
   try {
-    const updated = await storage.user.update(newAttributes, {
-      where: oldAttributes,
-    });
-    return updated;
+    const updated = await storage.updateRecord(
+      'User',
+      oldAttributes,
+      newAttributes,
+      t
+    );
+    return updated[0];
   } catch (err) {
     throw err;
   }
