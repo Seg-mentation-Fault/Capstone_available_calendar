@@ -59,7 +59,7 @@ module.exports = (storage) => {
         confirmCode: newReservation.reservation.confirmCode,
       });
     } catch (err) {
-      return res.status(400).json({ done: false, error: err });
+      return res.status(400).json({ done: false, error: err.message });
     }
   });
 
