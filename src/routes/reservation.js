@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 
 const { newUserReservation } = require('../service/userReservation');
+const { getReservations } = require('../service/getReservations');
 
 const router = express.Router();
 
@@ -38,8 +39,20 @@ const validation = [
     .isInt()
     .withMessage('Id should be an integer'),
 ];
+const validation2 = [
+  body('date')
+    .isDate()
+    .withMessage('date should an actual date format yyyy-mm-dd'),
+  body('ParkId')
+    .notEmpty()
+    .trim()
+    .escape()
+    .isInt()
+    .withMessage('Id should be an integer'),
+];
 
 module.exports = (storage) => {
+  // Create a new reservation
   router.post('/', validation, async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -63,5 +76,23 @@ module.exports = (storage) => {
     }
   });
 
+  // Retrive a list of reservation for a given park and date
+  router.post('/list', validation2, async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { date, ParkId } = req.body;
+      const reservations = await getReservations(storage, {
+        date,
+        ParkId,
+      });
+      return res.json(reservations);
+    } catch (err) {
+      return res.status(400).json({ done: false, error: err.message });
+    }
+  });
   return router;
 };
