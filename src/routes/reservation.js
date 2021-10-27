@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 
 const { newUserReservation } = require('../service/userReservation');
 const { getReservations } = require('../service/getReservations');
+const { summary } = require('../service/sumaryReservation');
 
 const router = express.Router();
 
@@ -90,6 +91,25 @@ module.exports = (storage) => {
         ParkId,
       });
       return res.json(reservations);
+    } catch (err) {
+      return res.status(400).json({ done: false, error: err.message });
+    }
+  });
+
+  // Retrive a object with a summary for a given park and date
+  router.post('/summary', validation2, async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { date, ParkId } = req.body;
+      const summaryReservation = await summary(storage, {
+        date,
+        ParkId,
+      });
+      return res.json(summaryReservation);
     } catch (err) {
       return res.status(400).json({ done: false, error: err.message });
     }
