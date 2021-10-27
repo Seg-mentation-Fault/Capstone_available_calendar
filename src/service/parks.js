@@ -5,7 +5,7 @@ const {
 } = require('../controllers/parkContrlloers');
 
 /**
- *
+ * parks - get all parks
  * @param {*} storage - Constructor of the data base strorage.
  * @returns a list of parks
  */
@@ -20,12 +20,12 @@ const parks = async (storage) => {
 };
 
 /**
- *
+ * newPark - Creates a new park
  * @param {*} storage - Constructor of the data base strorage.
  * @param {*} attributes - Object with data to create the new user
- * @param {String} attributes.name - the name of the park
- * @param {String} attributes.capacity - the exact cacity of the park
- * @returns
+ * @param {String} attributes.name - the name of the new park
+ * @param {Number} attributes.capacity - the exact capacity of the new park
+ * @returns {Object} park - record of the new park
  */
 const newPark = async (storage, attributes) => {
   const t = await storage.client.transaction();
@@ -53,35 +53,38 @@ const newPark = async (storage, attributes) => {
 };
 
 /**
- *
- * @param {*} storage
- * @param {*} attributes
- * @returns
+ * putPark - upadate a park information
+ * @param {*} storage - Constructor of the data base strorage.
+ * @param {*} attributes  Object with data to update the park
+ * @param {*} attributes.id  Id of the park to update
  */
 const putPark = async (storage, attributes) => {
   const t = await storage.client.transaction();
 
   try {
+    // check if a park exists to update exists
     let park = await storage.park.findOne({
-      where: { name: attributes.name },
+      where: { id: attributes.id },
     });
     if (park === null) {
-      throw new Error(`Park ${attributes.name} do not exist`);
+      throw new Error(`Park ${park.name} do not exist`);
     }
+    // set the new attributes to update
     const newAttr = { name: park.name, capacity: park.capacity };
-
     if (attributes.name && attributes.name !== park.name) {
       newAttr.name = attributes.name;
     }
-    if (attributes.capacity && attributes.c !== park.capacity) {
+    if (attributes.capacity && attributes.capacity !== park.capacity) {
       newAttr.capacity = attributes.capacity;
     }
     park = await updatePark(storage, { id: attributes.id }, newAttr, t);
     if (park >= 1) {
+      await t.commit();
       return { done: true };
     }
     throw new Error('Nothing was updated');
   } catch (err) {
+    await t.rollback();
     throw err;
   }
 };

@@ -5,7 +5,11 @@ const { parks, newPark, putPark } = require('../service/parks');
 const router = express.Router();
 
 const validation = [
-  body('name').trim().escape().isAlpha().withMessage('Name must be a string'),
+  body('name')
+    .trim()
+    .escape()
+    .isAlpha('en-US', { ignore: ' ' })
+    .withMessage('Name must be a string'),
   body('capacity')
     .escape()
     .isInt()
