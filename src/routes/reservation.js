@@ -6,6 +6,9 @@ const { getReservations } = require('../service/getReservations');
 const { summary } = require('../service/sumaryReservation');
 
 const router = express.Router();
+const yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date())
+  .toISOString()
+  .slice(0, 10);
 
 const validation = [
   body('firstName')
@@ -32,7 +35,9 @@ const validation = [
     .withMessage('guest should be an Integer and above 0'),
   body('date')
     .isDate()
-    .withMessage('date should an actual date format yyyy-mm-dd'),
+    .withMessage('date should an actual date format yyyy-mm-dd')
+    .isAfter(yesterday)
+    .withMessage('date can not be before today'),
   body('ParkId')
     .notEmpty()
     .trim()
