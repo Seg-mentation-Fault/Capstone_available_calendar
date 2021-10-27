@@ -8,7 +8,7 @@ const validation = [
   body('name')
     .trim()
     .escape()
-    .isAlpha('en-US', { ignore: ' ' })
+    .isAlphanumeric('en-US', { ignore: ' ' })
     .withMessage('Name must be a string'),
   body('capacity')
     .escape()

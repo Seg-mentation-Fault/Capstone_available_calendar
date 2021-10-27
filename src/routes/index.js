@@ -11,8 +11,9 @@ module.exports = (storage) => {
     res.sendStatus(200);
   });
 
-  router.use('/parks', parksRoute(storage)); // should be parksRoute
-  router.use('/retrive-parks-date', parkCapacityRoute(storage)); // should be parksCapacityRoute
+  router.use('/parks', parksRoute(storage));
+  // router.use('/retrive-parks-date', parkCapacityRoute(storage));
+  router.use('/parkcapacity', parkCapacityRoute(storage));
   router.use('/reservation', reservationRoute(storage));
   return router;
 };

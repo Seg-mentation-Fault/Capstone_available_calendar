@@ -1,13 +1,13 @@
 const { newParkCapacity } = require('../controllers/parkCapacityController');
 
 /**
- * updateCapacity - Update the capacity of a park for a given date
+ * addParkCapacity - Create a new park capacity for a park on a given date
  * @async
  * @param {} storage - Constructor of the data base strorage.
  * @param {Object} data - Object with data to find parks
  * @param {Number} data.ParkId -number of the park id.
  * @param {String} data.date - String with the date farmat "yyyy-mm-dd"
- * @param {Number} data.dayCapacity - the new capacity to update.
+ * @param {Number} data.dayCapacity - the capacity for the park.
  * @return {Array} Array - a list of parks capacities for a given park.
  */
 const addParkCapacity = async (storage, data) => {

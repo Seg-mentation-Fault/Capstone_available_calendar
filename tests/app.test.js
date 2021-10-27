@@ -57,7 +57,7 @@ describe('POST /retrive-parks-date ', () => {
             },
             {
               id: 4,
-              name: 'El Mundo de los Niños',
+              name: 'El Mundo de los Ninos',
               availability: true,
             },
           ]);
@@ -108,7 +108,7 @@ describe('POST /retrive-parks-date ', () => {
             },
             {
               id: 4,
-              name: 'El Mundo de los Niños',
+              name: 'El Mundo de los Ninos',
               availability: false,
             },
           ]);

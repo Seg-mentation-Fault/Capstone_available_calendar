@@ -38,7 +38,7 @@ const validation3 = [
 
 module.exports = (storage) => {
   // get all parks with availability status for n guests
-  router.post('/', validation, async (req, res) => {
+  router.post('/availability', validation, async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -68,7 +68,7 @@ module.exports = (storage) => {
   });
 
   // Add a new park capacity for a park on a given day
-  router.post('/add', validation3, async (req, res) => {
+  router.post('/', validation3, async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -87,7 +87,7 @@ module.exports = (storage) => {
   });
 
   // update a par capacity for a given day and park ID
-  router.put('/update', validation3, async (req, res) => {
+  router.put('/', validation3, async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

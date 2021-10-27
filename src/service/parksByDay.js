@@ -7,7 +7,7 @@ const { capacityConfirm } = require('../controllers/reservationController');
  * @param {} storage - Constructor of the data base strorage.
  * @param {Object} data - Object with data to find parks
  * @param {String} data.date - String with the date farmat "yyyy-mm-dd"
- * @param {Number} data.numOfGuests - Numberof guests to check availability
+ * @param {Number} data.numOfGuests - Number of guests to check availability
  * @return {Array} Promise - a list with objects with the name, id and availability.
  */
 const parksByDay = async (storage, data) => {
