@@ -14,7 +14,21 @@ const validation = [
     .escape()
     .isInt()
     .withMessage('Capacity should be an integer'),
-  //   body('id').escape().isInt().withMessage('Id should be an integer'),
+];
+
+const validation2 = [
+  body('name')
+    .optional()
+    .trim()
+    .escape()
+    .isAlphanumeric('en-US', { ignore: ' ' })
+    .withMessage('Name must be a string'),
+  body('capacity')
+    .optional()
+    .escape()
+    .isInt()
+    .withMessage('Capacity should be an integer'),
+  body('id').escape().isInt().withMessage('Id should be an integer'),
 ];
 
 module.exports = (storage) => {
@@ -41,13 +55,16 @@ module.exports = (storage) => {
     }
   });
 
-  router.put('/', validation, async (req, res) => {
+  router.put('/', validation2, async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { id, name, capacity } = req.body;
+      const { id } = req.body;
+      const name = req.body.name ? req.body.name : null;
+      const capacity = req.body.capacity ? req.body.capacity : null;
+
       const updated = await putPark(storage, { id, name, capacity });
       return res.json(updated);
     } catch (err) {
