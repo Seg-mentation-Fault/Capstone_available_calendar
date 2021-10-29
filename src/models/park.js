@@ -17,7 +17,7 @@ const mapPark = (sequelize) => {
         notEmpty: true,
         allowNull: false,
         validate: {
-          is: /^[A-Za-z 0-9]+$/,
+          is: /^[A-Za-z 0-9\u00f1\u00d1]+$/,
         },
       },
       capacity: {

@@ -12,13 +12,13 @@ const yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date())
 
 const validation = [
   body('firstName')
-    .isAlpha()
+    .isAlpha('es-ES', { ignore: ' ' })
     .trim()
     .isLength({ min: 2 })
     .escape()
     .withMessage('First name must be a string'),
   body('lastName')
-    .isAlpha()
+    .isAlpha('es-ES', { ignore: ' ' })
     .trim()
     .isLength({ min: 2 })
     .escape()
