@@ -2,18 +2,23 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 
 const { newUserReservation } = require('../service/userReservation');
+const { getReservations } = require('../service/getReservations');
+const { summary } = require('../service/sumaryReservation');
 
 const router = express.Router();
+const yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date())
+  .toISOString()
+  .slice(0, 10);
 
 const validation = [
   body('firstName')
-    .isAlpha()
+    .isAlpha('es-ES', { ignore: ' ' })
     .trim()
     .isLength({ min: 2 })
     .escape()
     .withMessage('First name must be a string'),
   body('lastName')
-    .isAlpha()
+    .isAlpha('es-ES', { ignore: ' ' })
     .trim()
     .isLength({ min: 2 })
     .escape()
@@ -30,6 +35,19 @@ const validation = [
     .withMessage('guest should be an Integer and above 0'),
   body('date')
     .isDate()
+    .withMessage('date should an actual date format yyyy-mm-dd')
+    .isAfter(yesterday)
+    .withMessage('date can not be before today'),
+  body('ParkId')
+    .notEmpty()
+    .trim()
+    .escape()
+    .isInt()
+    .withMessage('Id should be an integer'),
+];
+const validation2 = [
+  body('date')
+    .isDate()
     .withMessage('date should an actual date format yyyy-mm-dd'),
   body('ParkId')
     .notEmpty()
@@ -40,6 +58,7 @@ const validation = [
 ];
 
 module.exports = (storage) => {
+  // Create a new reservation
   router.post('/', validation, async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -59,9 +78,46 @@ module.exports = (storage) => {
         confirmCode: newReservation.reservation.confirmCode,
       });
     } catch (err) {
-      return res.status(400).json({ done: false, error: err });
+      return res.status(400).json({ done: false, error: err.message });
     }
   });
 
+  // Retrive a list of reservation for a given park and date
+  router.post('/list', validation2, async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { date, ParkId } = req.body;
+      const reservations = await getReservations(storage, {
+        date,
+        ParkId,
+      });
+      return res.json(reservations);
+    } catch (err) {
+      return res.status(400).json({ done: false, error: err.message });
+    }
+  });
+
+  // Retrive a object with a summary for a given park and date
+  router.post('/summary', validation2, async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { date, ParkId } = req.body;
+      const summaryReservation = await summary(storage, {
+        date,
+        ParkId,
+      });
+      return res.json(summaryReservation);
+    } catch (err) {
+      return res.status(400).json({ done: false, error: err.message });
+    }
+  });
   return router;
 };

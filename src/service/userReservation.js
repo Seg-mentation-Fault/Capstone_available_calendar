@@ -15,9 +15,9 @@ const {
  * @param {String} userAttr.firstName - String with the first name
  * @param {String} userAttr.lastName - String with the last name
  * @param {Object} reservationAttr - Object with data to find parks
- * @param {String} reservationAttr.date - String with the date farmat "yyyy-mm-dd"
+ * @param {String} reservationAttr.date - String with the date format "yyyy-mm-dd"
  * @param {Number} reservationAttr.numOfGuests - Number of guests
- * @param {Number} reservationAttr.ParkId - Id Numberumber
+ * @param {Number} reservationAttr.ParkId - Id Number of a park
  * @return {Object} reservation - record of the new reservation
  */
 const newUserReservation = async (storage, userAttr, reservationAttr) => {

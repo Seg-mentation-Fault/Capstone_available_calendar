@@ -17,12 +17,17 @@ const mapPark = (sequelize) => {
         notEmpty: true,
         allowNull: false,
         validate: {
-          isAlphanumeric: false,
+          is: /^[A-Za-z 0-9\u00f1\u00d1]+$/,
         },
       },
       capacity: {
         type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        notEmpty: false,
       },
     },
     {
