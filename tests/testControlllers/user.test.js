@@ -15,14 +15,14 @@ describe('user model', () => {
 
   it('create a user with valid fields', async () => {
     const valid = {
-      firstName: 'user1',
-      lastName: 'user1',
+      firstName: 'userone',
+      lastName: 'userone',
       email: 'username@example.com',
     };
 
     const actual = await createUser(storage, valid);
-    expect(actual.firstName).toEqual('user1');
-    expect(actual.lastName).toEqual('user1');
+    expect(actual.firstName).toEqual('userone');
+    expect(actual.lastName).toEqual('userone');
     expect(actual.email).toEqual('username@example.com');
   });
 });
@@ -30,8 +30,8 @@ describe('user model', () => {
 describe('get User', () => {
   it('Shoud get an user a return it', async () => {
     const newUser = await createUser(storage, {
-      firstName: 'user1',
-      lastName: 'user1',
+      firstName: 'userone',
+      lastName: 'userone',
       email: 'username2@example.com',
     });
     const findUser = await getUser(storage, { email: 'username2@example.com' });
@@ -50,13 +50,13 @@ describe('get User', () => {
 describe('getAllUSer', () => {
   it('should return a lists of all users', async () => {
     const newUser1 = await createUser(storage, {
-      firstName: 'user1',
-      lastName: 'user1',
+      firstName: 'userone',
+      lastName: 'userone',
       email: 'username3@example.com',
     });
     const newUser2 = await createUser(storage, {
-      firstName: 'user1',
-      lastName: 'user1',
+      firstName: 'userone',
+      lastName: 'userone',
       email: 'username4@example.com',
     });
     const users = await getAllUser(storage);
@@ -121,8 +121,8 @@ describe('getAllUSer', () => {
 describe('delete user', () => {
   it('Should delete a given user by email', async () => {
     await createUser(storage, {
-      firstName: 'user1',
-      lastName: 'user1',
+      firstName: 'userone',
+      lastName: 'userone',
       email: 'username12@example.com',
     });
     const deleted = await deleteUser(storage, {

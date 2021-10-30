@@ -35,7 +35,7 @@ describe('POST /retrive-parks-date ', () => {
   it('Respond list of objects with parks information, valid guest and date', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
-        .post('/retrive-parks-date')
+        .post('/parkcapacity/availability')
         .send({ numOfGuests: 400, date: '2021-10-13' })
         .expect(200)
         .then((response) => {
@@ -71,7 +71,7 @@ describe('POST /retrive-parks-date ', () => {
   it('Respond with a empty list, date with no parks asigned', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
-        .post('/retrive-parks-date')
+        .post('/parkcapacity/availability')
         .send({ numOfGuests: 400, date: '2021-10-05' })
         .expect(200)
         .then((response) => {
@@ -86,7 +86,7 @@ describe('POST /retrive-parks-date ', () => {
   it('Respond with a list, with no capacity for any park', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
-        .post('/retrive-parks-date')
+        .post('/parkcapacity/availability')
         .send({ numOfGuests: 8000, date: '2021-10-13' })
         .expect(200)
         .then((response) => {
@@ -122,7 +122,7 @@ describe('POST /retrive-parks-date ', () => {
   it('Respond with a ERROR, numOfGuests should be a number', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
-        .post('/retrive-parks-date')
+        .post('/parkcapacity/availability')
         .send({ numOfGuests: 'any8000', date: '2021-10-13' })
         .expect(400)
         .then((response) => {
@@ -146,7 +146,7 @@ describe('POST /retrive-parks-date ', () => {
   it('Respond with a ERROR, date should be a valid date', (done) => {
     try {
       request('http://localhost:3000/api/v1/')
-        .post('/retrive-parks-date')
+        .post('/parkcapacity/availability')
         .send({ numOfGuests: 400, date: '2021-13-13' })
         .expect(400)
         .end((err, res) => {

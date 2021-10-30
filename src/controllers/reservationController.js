@@ -68,6 +68,9 @@ const getAllReservation = async (storage, attributes) => {
   try {
     const reservations = await storage.reservation.findAll({
       where: attributes,
+      include: {
+        model: storage.user,
+      },
       raw: true,
     });
     return reservations;
@@ -87,6 +90,7 @@ const getReservation = async (storage, attributes) => {
   try {
     const reservation = await storage.reservation.findOne({
       where: { confirmCode: attributes.confirmCode },
+      raw: true,
     });
     return reservation;
   } catch (err) {

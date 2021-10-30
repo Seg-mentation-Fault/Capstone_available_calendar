@@ -1,32 +1,96 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const { parksByDay } = require('../service/parksByDay');
+const { parks, newPark, putPark } = require('../service/parks');
 
 const router = express.Router();
 
 const validation = [
-  body('numOfGuests')
+  body('name')
     .trim()
     .escape()
-    .isInt({ min: 1 })
-    .withMessage('guest should be an Integer and above 0'),
-  body('date')
-    .isDate()
-    .withMessage('date should an actual date format yyyy-mm-dd'),
+    .isAlphanumeric('es-ES', { ignore: ' ' })
+    .withMessage('Name must be a string'),
+  body('capacity')
+    .escape()
+    .isInt()
+    .withMessage('Capacity should be an integer'),
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .escape()
+    .isString()
+    .withMessage('Description must be a string')
+    .isLength({ max: 100 })
+    .withMessage('Description can not be longer than 100 characthers'),
+];
+
+const validation2 = [
+  body('name')
+    .optional()
+    .trim()
+    .escape()
+    .isAlphanumeric('es-ES', { ignore: ' ' })
+    .withMessage('Name must be a string'),
+  body('capacity')
+    .optional()
+    .escape()
+    .isInt()
+    .withMessage('Capacity should be an integer'),
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .escape()
+    .isString()
+    .withMessage('Description must be a string')
+    .isLength({ max: 100 })
+    .withMessage('Description can not be longer than 100 characthers'),
+  body('id').escape().isInt().withMessage('Id should be an integer'),
 ];
 
 module.exports = (storage) => {
+  router.get('/', async (req, res) => {
+    try {
+      const parksList = await parks(storage);
+      return res.json(parksList);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  });
+
   router.post('/', validation, async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { numOfGuests, date } = req.body;
-      const parks = await parksByDay(storage, { numOfGuests, date });
-      return res.json(parks);
+      const { name, capacity, description } = req.body;
+      const park = await newPark(storage, { name, capacity, description });
+      return res.json(park);
     } catch (err) {
-      return res.status(400).json({ error: err });
+      return res.status(400).json({ done: false, error: err.message });
+    }
+  });
+
+  router.put('/', validation2, async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      const { id } = req.body;
+      const name = req.body.name ? req.body.name : null;
+      const capacity = req.body.capacity ? req.body.capacity : null;
+      const description = req.body.description ? req.body.description : null;
+
+      const updated = await putPark(storage, {
+        id,
+        name,
+        capacity,
+        description,
+      });
+      return res.json(updated);
+    } catch (err) {
+      return res.status(400).json({ done: false, error: err.message });
     }
   });
 

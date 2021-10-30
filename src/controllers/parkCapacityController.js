@@ -48,6 +48,28 @@ const getAllParksDay = async (storage, data) => {
 };
 
 /**
+ * getAllParksById - Get all parks that match with a given park.
+ * @async
+ * @param {*} storage - Constructor of the data base strorage.
+ * @param {Object} data - Object with the data to search parks capacities
+ * @param {Object} data.ParkId - Object with the id to search parks
+ * @return {Array} parksDays - List with objects of all parksCapacitys for a given park
+ */
+const getAllParksId = async (storage, data) => {
+  try {
+    const parks = await storage.parkCapacity.findAll({
+      where: { ParkId: data.ParkId },
+      include: {
+        model: storage.park,
+      },
+    });
+    return parks;
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
  * newParkCapacity - insert a new record with tha capacity for a specific park
  * @param {*} storage - Constructor of the data base strorage.
  * @param {Object} attributes - Object with the date to asigne park capacity
@@ -63,29 +85,19 @@ const newParkCapacity = async (storage, attributes, t) => {
     let parkCapacity = await storage.parkCapacity.findOne({
       where: { date: attributes.date, ParkId: attributes.ParkId },
     });
-    // get the full capacity of a park
-    const fullCapacity = await storage.park.findOne({
-      attributes: ['capacity'],
-      where: { id: attributes.ParkId },
-    });
-    if (fullCapacity === null) {
-      throw new Error('Park ID does not exist');
+    if (parkCapacity) {
+      throw new Error('The park capacity for this park and date already exist');
     }
-    // create the new record if the given capacity is less than full capacity
-    if (
-      parkCapacity === null &&
-      attributes.dayCapacity <= fullCapacity.dataValues.capacity
-    ) {
-      parkCapacity = await storage.createRecord(
-        'ParkCapacity',
-        {
-          date: attributes.date,
-          dayCapacity: attributes.dayCapacity,
-          ParkId: attributes.ParkId,
-        },
-        t
-      );
-    }
+    // create the new record
+    parkCapacity = await storage.createRecord(
+      'ParkCapacity',
+      {
+        date: attributes.date,
+        dayCapacity: attributes.dayCapacity,
+        ParkId: attributes.ParkId,
+      },
+      t
+    );
     return parkCapacity;
   } catch (err) {
     throw err;
@@ -121,17 +133,17 @@ const deleteParkCapacity = async (storage, attributes, t) => {
 /**
  *
  * @param {*} storage - Constructor of the data base strorage.
- * @param {Object} oldAttr -attributes to find the record to update
- * @param {Object} newAttr - atrributes to update
+ * @param {Object} oldAttributes -attributes to find the record to update
+ * @param {Object} newAttributes - atrributes to update
  * @param {*} t - transaction of the ORM
  * @returns {object} done:true if update was success and error if not
  */
-const updateParkCapacity = async (storage, oldAttr, newAttr, t) => {
+const updateParkCapacity = async (storage, oldAttributes, newAttributes, t) => {
   try {
     const updated = await storage.updateRecord(
       'ParkCapacity',
-      { date: oldAttr.date, ParkId: oldAttr.ParkId },
-      newAttr,
+      oldAttributes,
+      newAttributes,
       t
     );
     if (updated[0] >= 1) {
@@ -145,6 +157,7 @@ const updateParkCapacity = async (storage, oldAttr, newAttr, t) => {
 
 exports.getParkCapacityDay = getParkCapacityDay;
 exports.getAllParksDay = getAllParksDay;
+exports.getAllParksId = getAllParksId;
 exports.newParkCapacity = newParkCapacity;
 exports.deleteParkCapacity = deleteParkCapacity;
 exports.updateParkCapacity = updateParkCapacity;
