@@ -18,7 +18,7 @@ const validation = [
     .optional({ nullable: true })
     .trim()
     .escape()
-    .isAlphanumeric('es-ES', { ignore: ' ' })
+    .isString()
     .withMessage('Description must be a string')
     .isLength({ max: 100 })
     .withMessage('Description can not be longer than 100 characthers'),

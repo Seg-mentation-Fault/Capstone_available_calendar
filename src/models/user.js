@@ -17,7 +17,6 @@ const mapUser = (sequelize) => {
         notEmpty: true,
         allowNull: false,
         validate: {
-          isAlphanumeric: false,
           is: /^[A-Za-z \u00f1\u00d1]+$/,
         },
       },
@@ -26,7 +25,6 @@ const mapUser = (sequelize) => {
         notEmpty: true,
         allowNull: false,
         validate: {
-          isAlphanumeric: false,
           is: /^[A-Za-z \u00f1\u00d1]+$/,
         },
       },
