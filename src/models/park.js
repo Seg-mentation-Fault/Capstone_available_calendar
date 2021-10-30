@@ -24,6 +24,11 @@ const mapPark = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      description: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        notEmpty: false,
+      },
     },
     {
       // Other model options go here

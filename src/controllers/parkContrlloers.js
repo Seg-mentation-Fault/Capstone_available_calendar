@@ -5,6 +5,7 @@
  * @param {Object} attributes - Object with data to create the new user
  * @param {String} attributes.name - the name of the park
  * @param {String} attributes.capacity - the exact cacity of the park
+ * @param {String} attributes.description - Despription of the mark max length 100 characteres
  * @param {} t - a key for transactions
  * @return {Object} park - record of the new park
  */
@@ -15,6 +16,7 @@ const createPark = async (storage, attributes, t) => {
       {
         name: attributes.name,
         capacity: attributes.capacity,
+        description: attributes.description,
       },
       t
     );

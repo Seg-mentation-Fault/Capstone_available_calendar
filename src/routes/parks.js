@@ -14,6 +14,14 @@ const validation = [
     .escape()
     .isInt()
     .withMessage('Capacity should be an integer'),
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .escape()
+    .isAlphanumeric('es-ES', { ignore: ' ' })
+    .withMessage('Description must be a string')
+    .isLength({ max: 100 })
+    .withMessage('Description can not be longer than 100 characthers'),
 ];
 
 const validation2 = [
@@ -28,6 +36,14 @@ const validation2 = [
     .escape()
     .isInt()
     .withMessage('Capacity should be an integer'),
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .escape()
+    .isString()
+    .withMessage('Description must be a string')
+    .isLength({ max: 100 })
+    .withMessage('Description can not be longer than 100 characthers'),
   body('id').escape().isInt().withMessage('Id should be an integer'),
 ];
 
@@ -47,8 +63,8 @@ module.exports = (storage) => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-      const { name, capacity } = req.body;
-      const park = await newPark(storage, { name, capacity });
+      const { name, capacity, description } = req.body;
+      const park = await newPark(storage, { name, capacity, description });
       return res.json(park);
     } catch (err) {
       return res.status(400).json({ done: false, error: err.message });
@@ -64,8 +80,14 @@ module.exports = (storage) => {
       const { id } = req.body;
       const name = req.body.name ? req.body.name : null;
       const capacity = req.body.capacity ? req.body.capacity : null;
+      const description = req.body.description ? req.body.description : null;
 
-      const updated = await putPark(storage, { id, name, capacity });
+      const updated = await putPark(storage, {
+        id,
+        name,
+        capacity,
+        description,
+      });
       return res.json(updated);
     } catch (err) {
       return res.status(400).json({ done: false, error: err.message });

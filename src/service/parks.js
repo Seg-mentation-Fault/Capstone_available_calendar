@@ -25,6 +25,7 @@ const parks = async (storage) => {
  * @param {*} attributes - Object with data to create the new user
  * @param {String} attributes.name - the name of the new park
  * @param {Number} attributes.capacity - the exact capacity of the new park
+ * @param {Number} attributes.description - Despription of the mark max length 100 characteres
  * @returns {Object} park - record of the new park
  */
 const newPark = async (storage, attributes) => {
@@ -39,6 +40,7 @@ const newPark = async (storage, attributes) => {
         {
           name: attributes.name,
           capacity: attributes.capacity,
+          description: attributes.description,
         },
         t
       );
@@ -71,11 +73,14 @@ const putPark = async (storage, attributes) => {
     }
     // set the new attributes to update
     const newAttr = { name: park.name, capacity: park.capacity };
-    if (attributes.name && attributes.name !== park.name) {
+    if (attributes.name) {
       newAttr.name = attributes.name;
     }
-    if (attributes.capacity && attributes.capacity !== park.capacity) {
+    if (attributes.capacity) {
       newAttr.capacity = attributes.capacity;
+    }
+    if (attributes.description) {
+      newAttr.description = attributes.description;
     }
     park = await updatePark(storage, { id: attributes.id }, newAttr, t);
     if (park >= 1) {
