@@ -21,7 +21,7 @@ const getReservations = async (storage, reservationAttr) => {
       const reservation = {
         confirmCode: element.confirmCode,
         numOfGuests: element.numOfGuests,
-        name: element['User.firstName'] + element['User.lastName'],
+        name: `${element['User.firstName']} ${element['User.lastName']}`,
         email: element['User.email'],
       };
       result.push(reservation);
