@@ -48,11 +48,9 @@ const newUserReservation = async (storage, userAttr, reservationAttr) => {
 
       Your confirmation code is ${reservation.confirmCode}`,
     };
-    transporter.sendMail(message, (err, info) => {
+    transporter.sendMail(message, (err) => {
       if (err) {
-        console.log(err);
-      } else {
-        console.log(info);
+        throw err;
       }
     });
     await t.commit();
