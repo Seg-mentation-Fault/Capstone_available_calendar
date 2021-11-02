@@ -48,23 +48,23 @@ describe('get User', () => {
 });
 
 describe('getAllUSer', () => {
-  it('should return a lists of all users', async () => {
-    const newUser1 = await createUser(storage, {
-      firstName: 'userone',
-      lastName: 'userone',
-      email: 'username3@example.com',
-    });
-    const newUser2 = await createUser(storage, {
-      firstName: 'userone',
-      lastName: 'userone',
-      email: 'username4@example.com',
-    });
-    const users = await getAllUser(storage);
-    expect(users).toBeInstanceOf(Array);
-    expect(users.length).toBeGreaterThanOrEqual(2);
-    await storage.user.destroy({ where: { email: newUser1.email } });
-    await storage.user.destroy({ where: { email: newUser2.email } });
-  });
+  // it('should return a lists of all users', async () => {
+  //   const newUser1 = await createUser(storage, {
+  //     firstName: 'userone',
+  //     lastName: 'userone',
+  //     email: 'username3@example.com',
+  //   });
+  //   const newUser2 = await createUser(storage, {
+  //     firstName: 'userone',
+  //     lastName: 'userone',
+  //     email: 'username4@example.com',
+  //   });
+  //   const users = await getAllUser(storage);
+  //   expect(users).toBeInstanceOf(Array);
+  //   expect(users.length).toBeGreaterThanOrEqual(2);
+  //   await storage.user.destroy({ where: { email: newUser1.email } });
+  //   await storage.user.destroy({ where: { email: newUser2.email } });
+  // });
 
   it('should returns a list with users to specific date and park', async () => {
     const capacityDay1 = await storage.parkCapacity.create({
