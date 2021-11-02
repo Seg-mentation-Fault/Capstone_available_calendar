@@ -50,6 +50,29 @@ const getPark = async (storage, attributes) => {
 };
 
 /**
+ * getParkById - find one park by id
+ * @async
+ * @param {} storage - Constructor of the data base strorage.
+ * @param {Object} attributes - Object with data to create the new user
+ * @param {String} attributes.ParkId - the name of the park
+ * @return {Object} park - the park to be find
+ */
+const getParkById = async (storage, attributes) => {
+  try {
+    const park = await storage.park.findOne({
+      where: { id: attributes.ParkId },
+      raw: true,
+    });
+    if (park) {
+      return park;
+    }
+    throw new Error('that Park did not exits');
+  } catch (err) {
+    throw err;
+  }
+};
+
+/**
  * getAllPark - get all the parks created
  * @async
  * @param {} storage - Constructor of the data base strorage.
@@ -111,6 +134,7 @@ const updatePark = async (storage, oldAttributes, newAttributes, t) => {
 
 exports.createPark = createPark;
 exports.getPark = getPark;
+exports.getParkById = getParkById;
 exports.getAllPark = getAllPark;
 exports.deletePark = deletePark;
 exports.updatePark = updatePark;

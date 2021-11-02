@@ -1,6 +1,8 @@
 //  controllers for models
+const { transporter } = require('./email');
 const { createUser } = require('../controllers/userController');
 const { getParkCapacityDay } = require('../controllers/parkCapacityController');
+const { getParkById } = require('../controllers/parkContrlloers');
 const {
   createReservation,
   capacityConfirm,
@@ -36,6 +38,21 @@ const newUserReservation = async (storage, userAttr, reservationAttr) => {
       user.id,
       t
     );
+    const park = await getParkById(storage, reservationAttr);
+    const message = {
+      from: process.env.SMTP_TO_EMAIL,
+      to: userAttr.email,
+      subject: `Reservation to ${park.name}`,
+      text: `Hi ${userAttr.firstName}
+      The reservation was made successfully for a party of ${reservationAttr.numOfGuests} on ${reservationAttr.date}.
+
+      Your confirmation code is ${reservation.confirmCode}`,
+    };
+    transporter.sendMail(message, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
     await t.commit();
     return { reservation };
   } catch (error) {
