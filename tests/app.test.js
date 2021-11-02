@@ -44,21 +44,25 @@ describe('POST /retrive-parks-date ', () => {
               id: 1,
               name: 'Mundo Aventura',
               availability: true,
+              description: null,
             },
             {
               id: 2,
               name: 'Salitre Magico',
               availability: true,
+              description: null,
             },
             {
               id: 3,
               name: 'Maloca',
               availability: true,
+              description: null,
             },
             {
               id: 4,
               name: 'El Mundo de los Niños',
               availability: true,
+              description: null,
             },
           ]);
           done();
@@ -95,21 +99,25 @@ describe('POST /retrive-parks-date ', () => {
               id: 1,
               name: 'Mundo Aventura',
               availability: false,
+              description: null,
             },
             {
               id: 2,
               name: 'Salitre Magico',
               availability: false,
+              description: null,
             },
             {
               id: 3,
               name: 'Maloca',
               availability: false,
+              description: null,
             },
             {
               id: 4,
               name: 'El Mundo de los Niños',
               availability: false,
+              description: null,
             },
           ]);
           done();
