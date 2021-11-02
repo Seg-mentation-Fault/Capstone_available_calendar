@@ -23,6 +23,7 @@ const parksByDay = async (storage, data) => {
         id: element.Park.id,
         name: element.Park.name,
         availability: element.dayCapacity,
+        description: element.Park.description,
       };
       result.push(parkInfo);
     });
