@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
-const { authEmail } = require('../credentialsNodeMail');
+/* eslint-disable */
+const { authEmail } = require('/credentials/credentialsNodeMail');
+/* eslint-disable */
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
