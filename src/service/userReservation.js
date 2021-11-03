@@ -40,7 +40,7 @@ const newUserReservation = async (storage, userAttr, reservationAttr) => {
     );
     const park = await getParkById(storage, reservationAttr);
     const message = {
-      from: process.env.SMTP_TO_EMAIL,
+      from: 'reservation.av.calendar@gmail.com',
       to: userAttr.email,
       subject: `Reservation to ${park.name}`,
       text: `Hi ${userAttr.firstName}
